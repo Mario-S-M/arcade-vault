@@ -25,3 +25,7 @@ No test runner is configured yet.
 ## Project intent
 
 Per `README.md`, Arcade Vault is meant to become an online multiplayer arcade platform where players compete on points. Development is intended to follow Spec Driven Design using the `/spec` and `/spec-impl` workflow from `Klerith/fernando-skills` — those skills/specs aren't installed in this repo yet.
+
+
+## Skills
+Usa siempre /fronted-design para diseñar la interfaz de usuarios
