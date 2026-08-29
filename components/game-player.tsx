@@ -11,7 +11,7 @@ export function GamePlayer({ game }: { game: Game }) {
   const { user } = useAuth();
   const lives = 3;
   const [score, setScore] = useState(0);
-  const level = Math.floor(score / 2500) + 1;
+  const [level, setLevel] = useState(1);
   const [paused, setPaused] = useState(false);
   const [over, setOver] = useState(false);
   const [nameOverride, setNameOverride] = useState<string | null>(null);
@@ -20,13 +20,20 @@ export function GamePlayer({ game }: { game: Game }) {
 
   useEffect(() => {
     if (over || paused) return;
-    const t = setInterval(() => setScore((s) => s + Math.floor(10 + Math.random() * 90)), 220);
+    const t = setInterval(() => {
+      setScore((s) => {
+        const next = s + Math.floor(10 + Math.random() * 90);
+        if (next > 0 && next % 2500 < 100) setLevel((l) => l + 1);
+        return next;
+      });
+    }, 220);
     return () => clearInterval(t);
   }, [over, paused]);
 
   const endGame = () => setOver(true);
   const restart = () => {
     setScore(0);
+    setLevel(1);
     setPaused(false);
     setOver(false);
     setSaved(false);
