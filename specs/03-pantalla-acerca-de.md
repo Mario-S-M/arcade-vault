@@ -1,6 +1,6 @@
 # SPEC 03 — Pantalla Acerca de + envío de correo con Resend
 
-> **Status:** Aprobado
+> **Status:** Implementado
 > **Depends on:** SPEC 02
 > **Date:** 2026-08-30
 > **Objective:** Portar la pantalla "Acerca de" de `references/resources/home-about/about.jsx` a la ruta `/acerca-de`, con su formulario de contacto enviando un correo real vía Resend a través de un endpoint propio.
@@ -80,18 +80,18 @@ Validación en el endpoint: `name`, `email` y `message` deben venir no vacíos d
 
 ## Acceptance criteria
 
-- [ ] `npm run build` termina sin errores.
-- [ ] `npm run lint` no reporta errores.
-- [ ] `/acerca-de` muestra el hero con misión, la fila de 3 destacados, el divisor animado y el formulario de contacto — igual a la plantilla.
-- [ ] Las secciones marcadas `reveal` aparecen con la animación de fade/slide al hacer scroll hasta ellas.
-- [ ] El nav muestra "Acerca de" después de "Salón de la Fama", en ese orden, en escritorio y en el panel móvil, apuntando a `/acerca-de`.
-- [ ] "Acerca de" está activo únicamente en `/acerca-de`; el resto de enlaces del nav conservan su comportamiento de SPEC 02 sin cambios.
-- [ ] Enviar el formulario con algún campo vacío dispara el `shake`, sin llamar a `/api/contacto`.
-- [ ] Enviar el formulario con datos válidos muestra "▶ ENVIANDO…" (botón deshabilitado) mientras se espera la respuesta del servidor.
-- [ ] Con `RESEND_API_KEY` válida configurada, el envío exitoso muestra el `terminal-success` con el nombre ingresado, y llega un correo real a `mayitolalito@hotmail.com` con `Reply-To` = correo del visitante.
-- [ ] Si la llamada a la API falla (por ejemplo `RESEND_API_KEY` ausente o inválida, o error de red), se muestra un mensaje de error dentro del formulario sin perder los datos escritos, y el usuario puede reintentar sin recargar la página.
-- [ ] Un `POST /api/contacto` con algún campo vacío o email con formato inválido responde `400` sin intentar enviar el correo.
-- [ ] `.env.template` existe en la raíz con `RESEND_API_KEY=` sin valor real; ninguna key real queda commiteada en el repositorio.
+- [x] `npm run build` termina sin errores.
+- [x] `npm run lint` no reporta errores.
+- [x] `/acerca-de` muestra el hero con misión, la fila de 3 destacados, el divisor animado y el formulario de contacto — igual a la plantilla.
+- [x] Las secciones marcadas `reveal` aparecen con la animación de fade/slide al hacer scroll hasta ellas.
+- [x] El nav muestra "Acerca de" después de "Salón de la Fama", en ese orden, en escritorio y en el panel móvil, apuntando a `/acerca-de`.
+- [x] "Acerca de" está activo únicamente en `/acerca-de`; el resto de enlaces del nav conservan su comportamiento de SPEC 02 sin cambios.
+- [x] Enviar el formulario con algún campo vacío dispara el `shake`, sin llamar a `/api/contacto`.
+- [x] Enviar el formulario con datos válidos muestra "▶ ENVIANDO…" (botón deshabilitado) mientras se espera la respuesta del servidor.
+- [x] Con `RESEND_API_KEY` válida configurada, el envío exitoso muestra el `terminal-success` con el nombre ingresado, y llega un correo real a `mayitolalito@hotmail.com` con `Reply-To` = correo del visitante.
+- [x] Si la llamada a la API falla (por ejemplo `RESEND_API_KEY` ausente o inválida, o error de red), se muestra un mensaje de error dentro del formulario sin perder los datos escritos, y el usuario puede reintentar sin recargar la página.
+- [x] Un `POST /api/contacto` con algún campo vacío o email con formato inválido responde `400` sin intentar enviar el correo.
+- [x] `.env.template` existe en la raíz con `RESEND_API_KEY=` sin valor real; ninguna key real queda commiteada en el repositorio.
 
 ---
 
