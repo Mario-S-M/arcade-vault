@@ -5,10 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/components/auth-provider";
 
-function isActive(pathname: string, name: "inicio" | "biblioteca" | "salon" | "auth"): boolean {
+function isActive(pathname: string, name: "inicio" | "biblioteca" | "salon" | "acerca-de" | "auth"): boolean {
   if (name === "inicio") return pathname === "/";
   if (name === "biblioteca") return pathname === "/biblioteca" || pathname.startsWith("/juegos");
   if (name === "salon") return pathname === "/salon";
+  if (name === "acerca-de") return pathname === "/acerca-de";
   return pathname === "/auth";
 }
 
@@ -36,6 +37,9 @@ export function Nav() {
           </Link>
           <Link href="/salon" className={isActive(pathname, "salon") ? "active" : ""}>
             Salón de la Fama
+          </Link>
+          <Link href="/acerca-de" className={isActive(pathname, "acerca-de") ? "active" : ""}>
+            Acerca de
           </Link>
         </div>
         <div className="spacer"></div>
@@ -70,6 +74,9 @@ export function Nav() {
         </Link>
         <Link href="/salon" className={isActive(pathname, "salon") ? "active" : ""} onClick={close}>
           Salón de la Fama
+        </Link>
+        <Link href="/acerca-de" className={isActive(pathname, "acerca-de") ? "active" : ""} onClick={close}>
+          Acerca de
         </Link>
         {user ? (
           <a
