@@ -20,7 +20,7 @@
 - Estados de UX nuevos en el formulario (no existían en la plantilla original, que era 100% simulada): "enviando" (botón deshabilitado, texto "▶ ENVIANDO…") y "error" (mensaje visible dentro del formulario, sin perder lo escrito, permitiendo reintentar). El estado de éxito (`terminal-success`) se mantiene igual que en la plantilla, pero ahora solo se muestra si el endpoint responde `200`.
 - Nuevo enlace "Acerca de" en el nav (escritorio + panel móvil), ubicado **después** de "Salón de la Fama", apuntando a `/acerca-de`. Se marca activo únicamente en `/acerca-de`.
 - Nueva dependencia `resend` en `package.json`.
-- Nuevo archivo `.env.example` en la raíz documentando `RESEND_API_KEY=` (sin valor real).
+- Nuevo archivo `.env.template` en la raíz documentando `RESEND_API_KEY=` (sin valor real).
 - Ampliación de `app/globals.css` con las clases de la sección "ABOUT PAGE" de la plantilla (`.about`, `.about-hero`, `.about-title`, `.about-mission`, `.highlight-row`/`.highlight`/`.hl-icon`/`.hl-text`, `.about-divider`/`.div-bar`/`.div-pixels`, `.about-contact`/`.contact-grid`/`.contact-intro`/`.contact-title`/`.contact-sub`/`.contact-tips`, `.contact-form` y sus reglas de `textarea`/`shake`, `.btn.press`, `.terminal-success`/`.term-*`), más una clase nueva `.form-error` (no existe en la plantilla) para el estado de error.
 
 **Out of scope (for future specs):**
@@ -67,7 +67,7 @@ Validación en el endpoint: `name`, `email` y `message` deben venir no vacíos d
 ## Implementation plan
 
 1. `npm install resend` — agrega la dependencia al proyecto. Verificable: `resend` aparece en `package.json` y `node_modules/resend` existe.
-2. Crear `.env.example` en la raíz con `RESEND_API_KEY=` (sin valor). Verificable: el archivo existe, no contiene ninguna key real, y `.env.local` (donde el usuario debe pegar su key real antes de probar el envío) sigue cubierto por `.gitignore`.
+2. Crear `.env.template` en la raíz con `RESEND_API_KEY=` (sin valor). Verificable: el archivo existe, no contiene ninguna key real, y `.env.local` (donde el usuario debe pegar su key real antes de probar el envío) sigue cubierto por `.gitignore`.
 3. Crear `app/api/contacto/route.ts`: handler `POST` que recibe `{ name, email, message }` del body JSON, valida los tres campos según el data model anterior; si falla, responde `400` con `{ ok: false, error }`. Si pasa, instancia `new Resend(process.env.RESEND_API_KEY)` y llama a `resend.emails.send({ from: "onboarding@resend.dev", to: "mayitolalito@hotmail.com", replyTo: email, subject: "Nuevo mensaje de contacto — Arcade Vault", text: ... })` incluyendo `name`, `email` y `message` en el cuerpo del texto. Si Resend devuelve error, responde `500` con `{ ok: false, error }`; si tiene éxito, responde `200` con `{ ok: true }`. Verificable: con `RESEND_API_KEY` configurada, `curl -X POST http://localhost:3000/api/contacto -H "Content-Type: application/json" -d '{"name":"a","email":"a@a.com","message":"hola"}'` devuelve `200 { ok: true }` y el correo llega a `mayitolalito@hotmail.com`.
 4. Crear `app/acerca-de/page.tsx` (`"use client"`) portando `about.jsx`: hero con misión, `highlight-row` con `HighlightIcon` local (HEART/BROWSER/PLANT, igual patrón que `FeatureIcon`/`MiniCard` en `app/page.tsx` — función local sin archivo propio), divisor animado, sección de contacto. Reutilizar el patrón `useReveal()` ya existente en `app/page.tsx`, duplicado localmente (misma convención ya usada, sin extraer a un hook compartido). Verificable: `npm run dev` en `/acerca-de` muestra la pantalla completa igual a la plantilla.
 5. Implementar el `onSubmit` del formulario de forma asíncrona: primero la validación de campos vacíos igual que la plantilla (dispara `shake` si falta alguno, sin llamar a la API); si pasa, estado `status: "sending"` (botón deshabilitado, texto "▶ ENVIANDO…"), luego `fetch("/api/contacto", { method: "POST", body: JSON.stringify(form) })`. Si la respuesta es `ok`, pasa a `status: "sent"` (muestra el `terminal-success` existente con el nombre ingresado). Si falla (respuesta no-ok o error de red/`fetch` rechazado), pasa a `status: "error"` y muestra el mensaje de error dentro del formulario, sin borrar lo escrito, permitiendo reintentar. Verificable: sin `RESEND_API_KEY` configurada (o con una inválida), el envío muestra el estado de error; con la key válida, muestra el `terminal-success`.
@@ -91,7 +91,7 @@ Validación en el endpoint: `name`, `email` y `message` deben venir no vacíos d
 - [ ] Con `RESEND_API_KEY` válida configurada, el envío exitoso muestra el `terminal-success` con el nombre ingresado, y llega un correo real a `mayitolalito@hotmail.com` con `Reply-To` = correo del visitante.
 - [ ] Si la llamada a la API falla (por ejemplo `RESEND_API_KEY` ausente o inválida, o error de red), se muestra un mensaje de error dentro del formulario sin perder los datos escritos, y el usuario puede reintentar sin recargar la página.
 - [ ] Un `POST /api/contacto` con algún campo vacío o email con formato inválido responde `400` sin intentar enviar el correo.
-- [ ] `.env.example` existe en la raíz con `RESEND_API_KEY=` sin valor real; ninguna key real queda commiteada en el repositorio.
+- [ ] `.env.template` existe en la raíz con `RESEND_API_KEY=` sin valor real; ninguna key real queda commiteada en el repositorio.
 
 ---
 
@@ -107,7 +107,7 @@ Validación en el endpoint: `name`, `email` y `message` deben venir no vacíos d
 - **Sí:** se agrega el enlace "Acerca de" al nav ahora que la pantalla existe. SPEC 02 lo había excluido explícitamente solo porque la pantalla todavía no existía. Confirmado por el usuario.
 - **Sí:** `HighlightIcon` se define como función local dentro de `app/acerca-de/page.tsx`, sin archivo propio en `components/`, igual patrón que `FeatureIcon`/`MiniCard` en `app/page.tsx` (Home) — específico de una sola pantalla, no reutilizado en otra ruta.
 - **Sí:** `useReveal()` se duplica localmente en `app/acerca-de/page.tsx` en vez de extraerse a un hook compartido en `lib/` — misma convención ya usada entre Home y esta pantalla; el proyecto no tiene una carpeta `hooks/` establecida todavía.
-- **No:** commitear `RESEND_API_KEY` en el repositorio. El usuario la agrega manualmente en `.env.local` (no versionado, ya cubierto por `.gitignore`) antes de probar el envío real end-to-end.
+- **No:** commitear `RESEND_API_KEY` en el repositorio. El usuario la agrega manualmente en `.env.local` (no versionado, cubierto explícitamente por `.gitignore`) antes de probar el envío real end-to-end.
 
 ---
 
@@ -115,7 +115,7 @@ Validación en el endpoint: `name`, `email` y `message` deben venir no vacíos d
 
 | Riesgo | Mitigación |
 | --- | --- |
-| El usuario no ha configurado `RESEND_API_KEY` en `.env.local` al momento de correr `/spec-impl`, por lo que el envío real de correo no se puede probar end-to-end durante la implementación. | El paso 2 crea `.env.example` como recordatorio; el paso 9 (Playwright) documenta que el envío real requiere la key configurada — si no está, ese punto específico queda pendiente de verificación manual por el usuario, sin bloquear el resto de la implementación (validación, estados de UX, nav, lint, build). |
+| El usuario no ha configurado `RESEND_API_KEY` en `.env.local` al momento de correr `/spec-impl`, por lo que el envío real de correo no se puede probar end-to-end durante la implementación. | El paso 2 crea `.env.template` como recordatorio; el paso 9 (Playwright) documenta que el envío real requiere la key configurada — si no está, ese punto específico queda pendiente de verificación manual por el usuario, sin bloquear el resto de la implementación (validación, estados de UX, nav, lint, build). |
 | En el plan gratuito de Resend, usando `onboarding@resend.dev` como remitente, solo se puede enviar a la dirección de correo con la que está registrada la cuenta de Resend — el correo podría no llegar a `mayitolalito@hotmail.com` si esa no es la cuenta verificada del usuario en Resend. | Documentado aquí explícitamente; si ocurre, el usuario deberá registrar/verificar `mayitolalito@hotmail.com` en su cuenta de Resend, o verificar un dominio propio y cambiar el remitente en una iteración futura. |
 
 ---
