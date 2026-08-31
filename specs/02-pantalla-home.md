@@ -1,6 +1,6 @@
 # SPEC 02 — Pantalla Home (landing)
 
-> **Status:** Aprobado
+> **Status:** Implementado
 > **Depends on:** SPEC 01
 > **Date:** 2026-08-30
 > **Objective:** Portar la pantalla Home de `references/resources/home-about/home.jsx` a la ruta raíz `/`, mover la Biblioteca actual a `/biblioteca` y agregar el enlace "Inicio" al nav, sin implementar la pantalla "Acerca de".
@@ -52,20 +52,20 @@ Esta spec no introduce estructuras de datos nuevas. Reutiliza `GAMES` de `lib/da
 
 ## Acceptance criteria
 
-- [ ] `npm run build` termina sin errores.
-- [ ] `npm run lint` no reporta errores.
-- [ ] `/` muestra la pantalla Home: hero con siluetas flotantes, sección de features, riel de 6 juegos, stats, actividad en vivo, precios/FAQ y CTA final.
-- [ ] Las secciones marcadas `reveal` aparecen con la animación de fade/slide al hacer scroll hasta ellas.
-- [ ] `/biblioteca` muestra la pantalla Biblioteca (buscador, chips de categoría, grilla de 8 juegos) — el mismo comportamiento que antes tenía `/`.
-- [ ] `/` ya no muestra la Biblioteca; la ruta `/biblioteca` es la única que la muestra.
-- [ ] El nav muestra "Inicio" antes de "Biblioteca", en ese orden, en escritorio y en el panel móvil.
-- [ ] "Inicio" está activo únicamente en `/`; "Biblioteca" está activo en `/biblioteca` y en `/juegos/[id]` y `/juegos/[id]/jugar`.
-- [ ] En Home, "EXPLORAR JUEGOS" y "VER TODOS LOS JUEGOS →" llevan a `/biblioteca`; "CREAR CUENTA", "EMPEZAR GRATIS →" e "INSERTAR MONEDA →" llevan a `/auth`; "VER SALÓN →" lleva a `/salon`; cada tarjeta del riel de juegos lleva a `/juegos/[id]` de ese juego.
-- [ ] Iniciar sesión o crear cuenta en `/auth` redirige a `/biblioteca`.
-- [ ] "VOLVER AL VAULT" en el detalle de un juego y en el modal de fin de partida del reproductor llevan a `/biblioteca`.
-- [ ] No existe ningún enlace "Acerca de" en el nav ni ninguna ruta `/acerca-de` o `/about`.
-- [ ] El menú móvil (hamburguesa) sigue abriendo y cerrando correctamente, ahora con 3 enlaces (Inicio, Biblioteca, Salón de la Fama) más la sesión.
-- [ ] Recorrido con Playwright sobre el servidor de desarrollo ya activo: `/`, `/biblioteca`, `/juegos/[id]`, `/juegos/[id]/jugar`, `/auth` y `/salon` cargan sin errores de consola ni de red; la navegación por el nav y el flujo Home → detalle de juego → "VOLVER AL VAULT" → `/biblioteca` funcionan como se describe arriba.
+- [x] `npm run build` termina sin errores.
+- [x] `npm run lint` no reporta errores.
+- [x] `/` muestra la pantalla Home: hero con siluetas flotantes, sección de features, riel de 6 juegos, stats, actividad en vivo, precios/FAQ y CTA final.
+- [x] Las secciones marcadas `reveal` aparecen con la animación de fade/slide al hacer scroll hasta ellas.
+- [x] `/biblioteca` muestra la pantalla Biblioteca (buscador, chips de categoría, grilla de 8 juegos) — el mismo comportamiento que antes tenía `/`.
+- [x] `/` ya no muestra la Biblioteca; la ruta `/biblioteca` es la única que la muestra.
+- [x] El nav muestra "Inicio" antes de "Biblioteca", en ese orden, en escritorio y en el panel móvil.
+- [x] "Inicio" está activo únicamente en `/`; "Biblioteca" está activo en `/biblioteca` y en `/juegos/[id]` y `/juegos/[id]/jugar`.
+- [x] En Home, "EXPLORAR JUEGOS" y "VER TODOS LOS JUEGOS →" llevan a `/biblioteca`; "CREAR CUENTA", "EMPEZAR GRATIS →" e "INSERTAR MONEDA →" llevan a `/auth`; "VER SALÓN →" lleva a `/salon`; cada tarjeta del riel de juegos lleva a `/juegos/[id]` de ese juego.
+- [x] Iniciar sesión o crear cuenta en `/auth` redirige a `/biblioteca`.
+- [x] "VOLVER AL VAULT" en el detalle de un juego y en el modal de fin de partida del reproductor llevan a `/biblioteca`.
+- [x] No existe ningún enlace "Acerca de" en el nav ni ninguna ruta `/acerca-de` o `/about`.
+- [x] El menú móvil (hamburguesa) sigue abriendo y cerrando correctamente, ahora con 3 enlaces (Inicio, Biblioteca, Salón de la Fama) más la sesión.
+- [x] Recorrido con Playwright sobre el servidor de desarrollo ya activo: `/`, `/biblioteca`, `/juegos/[id]`, `/juegos/[id]/jugar`, `/auth` y `/salon` cargan sin errores de consola ni de red; la navegación por el nav y el flujo Home → detalle de juego → "VOLVER AL VAULT" → `/biblioteca` funcionan como se describe arriba.
 
 ---
 
