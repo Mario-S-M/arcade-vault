@@ -85,10 +85,10 @@ Esta spec no introduce estructuras de datos nuevas. Reutiliza `GAMES` de `lib/da
 
 ## Risks
 
-| Riesgo | Mitigación |
-| --- | --- |
-| Mover la Biblioteca de `/` a `/biblioteca` puede dejar enlaces rotos si algún archivo navega a `/` esperando ver la Biblioteca sin haber sido detectado en esta spec | El paso 4 del plan lista explícitamente los 3 puntos encontrados (`auth`, detalle de juego, modal de fin de partida); el paso 6 corre `npm run build`/`npm run lint`, y la verificación manual del paso 5 recorre las 6 pantallas para confirmar navegación. |
-| La clase `.blink` en la plantilla original está delimitada a `.av-hero .sub .blink` y no aplica realmente dentro de `.hero-eyebrow` de Home (parece una inconsistencia ya presente en la plantilla) | Se porta el CSS tal cual, sin "arreglar" el alcance del selector, para mantener fidelidad exacta con la plantilla de referencia. El cursor `_` del eyebrow queda estático, igual que en la plantilla original. |
+| Riesgo                                                                                                                                                                                              | Mitigación                                                                                                                                                                                                                                                   |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Mover la Biblioteca de `/` a `/biblioteca` puede dejar enlaces rotos si algún archivo navega a `/` esperando ver la Biblioteca sin haber sido detectado en esta spec                                | El paso 4 del plan lista explícitamente los 3 puntos encontrados (`auth`, detalle de juego, modal de fin de partida); el paso 6 corre `npm run build`/`npm run lint`, y la verificación manual del paso 5 recorre las 6 pantallas para confirmar navegación. |
+| La clase `.blink` en la plantilla original está delimitada a `.av-hero .sub .blink` y no aplica realmente dentro de `.hero-eyebrow` de Home (parece una inconsistencia ya presente en la plantilla) | Se porta el CSS tal cual, sin "arreglar" el alcance del selector, para mantener fidelidad exacta con la plantilla de referencia. El cursor `_` del eyebrow queda estático, igual que en la plantilla original.                                               |
 
 ---
 

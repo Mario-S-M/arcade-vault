@@ -9,14 +9,12 @@ export interface Game {
   best: number;
   plays: string;
 }
-
 export interface ScoreRow {
   rank: number;
   name: string;
   score: number;
   date: string;
 }
-
 export interface User {
   name: string;
 }

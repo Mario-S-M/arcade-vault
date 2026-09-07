@@ -51,13 +51,18 @@ Esta spec no introduce estructuras de datos persistidas (no hay base de datos ni
 **Response (éxito, `200`):**
 
 ```ts
-{ ok: true }
+{
+  ok: true;
+}
 ```
 
 **Response (validación fallida, `400`, o falla al enviar, `500`):**
 
 ```ts
-{ ok: false; error: string }
+{
+  ok: false;
+  error: string;
+}
 ```
 
 Validación en el endpoint: `name`, `email` y `message` deben venir no vacíos después de `trim()`; `email` debe cumplir un formato válido básico (regex simple tipo `/^[^\s@]+@[^\s@]+\.[^\s@]+$/`). Si falla, responde `400` sin llamar a Resend.
@@ -113,10 +118,10 @@ Validación en el endpoint: `name`, `email` y `message` deben venir no vacíos d
 
 ## Risks
 
-| Riesgo | Mitigación |
-| --- | --- |
-| El usuario no ha configurado `RESEND_API_KEY` en `.env.local` al momento de correr `/spec-impl`, por lo que el envío real de correo no se puede probar end-to-end durante la implementación. | El paso 2 crea `.env.template` como recordatorio; el paso 9 (Playwright) documenta que el envío real requiere la key configurada — si no está, ese punto específico queda pendiente de verificación manual por el usuario, sin bloquear el resto de la implementación (validación, estados de UX, nav, lint, build). |
-| En el plan gratuito de Resend, usando `onboarding@resend.dev` como remitente, solo se puede enviar a la dirección de correo con la que está registrada la cuenta de Resend — el correo podría no llegar a `mayitolalito@hotmail.com` si esa no es la cuenta verificada del usuario en Resend. | Documentado aquí explícitamente; si ocurre, el usuario deberá registrar/verificar `mayitolalito@hotmail.com` en su cuenta de Resend, o verificar un dominio propio y cambiar el remitente en una iteración futura. |
+| Riesgo                                                                                                                                                                                                                                                                                        | Mitigación                                                                                                                                                                                                                                                                                                           |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| El usuario no ha configurado `RESEND_API_KEY` en `.env.local` al momento de correr `/spec-impl`, por lo que el envío real de correo no se puede probar end-to-end durante la implementación.                                                                                                  | El paso 2 crea `.env.template` como recordatorio; el paso 9 (Playwright) documenta que el envío real requiere la key configurada — si no está, ese punto específico queda pendiente de verificación manual por el usuario, sin bloquear el resto de la implementación (validación, estados de UX, nav, lint, build). |
+| En el plan gratuito de Resend, usando `onboarding@resend.dev` como remitente, solo se puede enviar a la dirección de correo con la que está registrada la cuenta de Resend — el correo podría no llegar a `mayitolalito@hotmail.com` si esa no es la cuenta verificada del usuario en Resend. | Documentado aquí explícitamente; si ocurre, el usuario deberá registrar/verificar `mayitolalito@hotmail.com` en su cuenta de Resend, o verificar un dominio propio y cambiar el remitente en una iteración futura.                                                                                                   |
 
 ---
 
