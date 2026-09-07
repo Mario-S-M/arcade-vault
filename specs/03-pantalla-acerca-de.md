@@ -1,6 +1,6 @@
 # SPEC 03 — Pantalla Acerca de + envío de correo con Resend
 
-> **Status:** Aprobado
+> **Status:** Implementado
 > **Depends on:** SPEC 02
 > **Date:** 2026-08-30
 > **Objective:** Portar la pantalla "Acerca de" de `references/resources/home-about/about.jsx` a la ruta `/acerca-de`, con su formulario de contacto enviando un correo real vía Resend a través de un endpoint propio.
@@ -51,13 +51,18 @@ Esta spec no introduce estructuras de datos persistidas (no hay base de datos ni
 **Response (éxito, `200`):**
 
 ```ts
-{ ok: true }
+{
+  ok: true;
+}
 ```
 
 **Response (validación fallida, `400`, o falla al enviar, `500`):**
 
 ```ts
-{ ok: false; error: string }
+{
+  ok: false;
+  error: string;
+}
 ```
 
 Validación en el endpoint: `name`, `email` y `message` deben venir no vacíos después de `trim()`; `email` debe cumplir un formato válido básico (regex simple tipo `/^[^\s@]+@[^\s@]+\.[^\s@]+$/`). Si falla, responde `400` sin llamar a Resend.
@@ -80,18 +85,18 @@ Validación en el endpoint: `name`, `email` y `message` deben venir no vacíos d
 
 ## Acceptance criteria
 
-- [ ] `npm run build` termina sin errores.
-- [ ] `npm run lint` no reporta errores.
-- [ ] `/acerca-de` muestra el hero con misión, la fila de 3 destacados, el divisor animado y el formulario de contacto — igual a la plantilla.
-- [ ] Las secciones marcadas `reveal` aparecen con la animación de fade/slide al hacer scroll hasta ellas.
-- [ ] El nav muestra "Acerca de" después de "Salón de la Fama", en ese orden, en escritorio y en el panel móvil, apuntando a `/acerca-de`.
-- [ ] "Acerca de" está activo únicamente en `/acerca-de`; el resto de enlaces del nav conservan su comportamiento de SPEC 02 sin cambios.
-- [ ] Enviar el formulario con algún campo vacío dispara el `shake`, sin llamar a `/api/contacto`.
-- [ ] Enviar el formulario con datos válidos muestra "▶ ENVIANDO…" (botón deshabilitado) mientras se espera la respuesta del servidor.
-- [ ] Con `RESEND_API_KEY` válida configurada, el envío exitoso muestra el `terminal-success` con el nombre ingresado, y llega un correo real a `mayitolalito@hotmail.com` con `Reply-To` = correo del visitante.
-- [ ] Si la llamada a la API falla (por ejemplo `RESEND_API_KEY` ausente o inválida, o error de red), se muestra un mensaje de error dentro del formulario sin perder los datos escritos, y el usuario puede reintentar sin recargar la página.
-- [ ] Un `POST /api/contacto` con algún campo vacío o email con formato inválido responde `400` sin intentar enviar el correo.
-- [ ] `.env.template` existe en la raíz con `RESEND_API_KEY=` sin valor real; ninguna key real queda commiteada en el repositorio.
+- [x] `npm run build` termina sin errores.
+- [x] `npm run lint` no reporta errores.
+- [x] `/acerca-de` muestra el hero con misión, la fila de 3 destacados, el divisor animado y el formulario de contacto — igual a la plantilla.
+- [x] Las secciones marcadas `reveal` aparecen con la animación de fade/slide al hacer scroll hasta ellas.
+- [x] El nav muestra "Acerca de" después de "Salón de la Fama", en ese orden, en escritorio y en el panel móvil, apuntando a `/acerca-de`.
+- [x] "Acerca de" está activo únicamente en `/acerca-de`; el resto de enlaces del nav conservan su comportamiento de SPEC 02 sin cambios.
+- [x] Enviar el formulario con algún campo vacío dispara el `shake`, sin llamar a `/api/contacto`.
+- [x] Enviar el formulario con datos válidos muestra "▶ ENVIANDO…" (botón deshabilitado) mientras se espera la respuesta del servidor.
+- [x] Con `RESEND_API_KEY` válida configurada, el envío exitoso muestra el `terminal-success` con el nombre ingresado, y llega un correo real a `mayitolalito@hotmail.com` con `Reply-To` = correo del visitante.
+- [x] Si la llamada a la API falla (por ejemplo `RESEND_API_KEY` ausente o inválida, o error de red), se muestra un mensaje de error dentro del formulario sin perder los datos escritos, y el usuario puede reintentar sin recargar la página.
+- [x] Un `POST /api/contacto` con algún campo vacío o email con formato inválido responde `400` sin intentar enviar el correo.
+- [x] `.env.template` existe en la raíz con `RESEND_API_KEY=` sin valor real; ninguna key real queda commiteada en el repositorio.
 
 ---
 
@@ -113,10 +118,10 @@ Validación en el endpoint: `name`, `email` y `message` deben venir no vacíos d
 
 ## Risks
 
-| Riesgo | Mitigación |
-| --- | --- |
-| El usuario no ha configurado `RESEND_API_KEY` en `.env.local` al momento de correr `/spec-impl`, por lo que el envío real de correo no se puede probar end-to-end durante la implementación. | El paso 2 crea `.env.template` como recordatorio; el paso 9 (Playwright) documenta que el envío real requiere la key configurada — si no está, ese punto específico queda pendiente de verificación manual por el usuario, sin bloquear el resto de la implementación (validación, estados de UX, nav, lint, build). |
-| En el plan gratuito de Resend, usando `onboarding@resend.dev` como remitente, solo se puede enviar a la dirección de correo con la que está registrada la cuenta de Resend — el correo podría no llegar a `mayitolalito@hotmail.com` si esa no es la cuenta verificada del usuario en Resend. | Documentado aquí explícitamente; si ocurre, el usuario deberá registrar/verificar `mayitolalito@hotmail.com` en su cuenta de Resend, o verificar un dominio propio y cambiar el remitente en una iteración futura. |
+| Riesgo                                                                                                                                                                                                                                                                                        | Mitigación                                                                                                                                                                                                                                                                                                           |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| El usuario no ha configurado `RESEND_API_KEY` en `.env.local` al momento de correr `/spec-impl`, por lo que el envío real de correo no se puede probar end-to-end durante la implementación.                                                                                                  | El paso 2 crea `.env.template` como recordatorio; el paso 9 (Playwright) documenta que el envío real requiere la key configurada — si no está, ese punto específico queda pendiente de verificación manual por el usuario, sin bloquear el resto de la implementación (validación, estados de UX, nav, lint, build). |
+| En el plan gratuito de Resend, usando `onboarding@resend.dev` como remitente, solo se puede enviar a la dirección de correo con la que está registrada la cuenta de Resend — el correo podría no llegar a `mayitolalito@hotmail.com` si esa no es la cuenta verificada del usuario en Resend. | Documentado aquí explícitamente; si ocurre, el usuario deberá registrar/verificar `mayitolalito@hotmail.com` en su cuenta de Resend, o verificar un dominio propio y cambiar el remitente en una iteración futura.                                                                                                   |
 
 ---
 

@@ -1,15 +1,11 @@
 "use client";
-
 import { useRef } from "react";
 import { useRouter } from "next/navigation";
 import type { Game } from "@/lib/types";
-
 export function GameCard({ game }: { game: Game }) {
   const router = useRouter();
   const tiltRef = useRef<HTMLDivElement>(null);
-
   const goToDetail = () => router.push(`/juegos/${game.id}`);
-
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const el = tiltRef.current;
     if (!el) return;
@@ -18,13 +14,11 @@ export function GameCard({ game }: { game: Game }) {
     const py = (e.clientY - r.top) / r.height - 0.5;
     el.style.transform = `translateY(-6px) rotateX(${-py * 6}deg) rotateY(${px * 8}deg)`;
   };
-
   const onLeave = () => {
     const el = tiltRef.current;
     if (!el) return;
     el.style.transform = "";
   };
-
   return (
     <div
       ref={tiltRef}
@@ -46,7 +40,14 @@ export function GameCard({ game }: { game: Game }) {
             <b>{game.best.toLocaleString("es-ES")}</b>
           </div>
           <button
-            className={"btn " + (game.color === "magenta" ? "magenta" : game.color === "yellow" ? "yellow" : "")}
+            className={
+              "btn " +
+              (game.color === "magenta"
+                ? "magenta"
+                : game.color === "yellow"
+                  ? "yellow"
+                  : "")
+            }
             onClick={(e) => {
               e.stopPropagation();
               goToDetail();

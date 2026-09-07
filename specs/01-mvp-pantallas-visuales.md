@@ -67,9 +67,19 @@ export interface User {
 const USER_KEY = "av_user";
 const SCORES_KEY = "av_scores";
 
-export function getStoredUser(): User | null { /* try/catch, igual que la plantilla */ }
-export function setStoredUser(user: User | null): void { /* ... */ }
-export function saveScore(entry: { game: string; score: number; name: string }): void { /* ... */ }
+export function getStoredUser(): User | null {
+  /* try/catch, igual que la plantilla */
+}
+export function setStoredUser(user: User | null): void {
+  /* ... */
+}
+export function saveScore(entry: {
+  game: string;
+  score: number;
+  name: string;
+}): void {
+  /* ... */
+}
 ```
 
 `components/auth-provider.tsx` expone un contexto `AuthContext` y un hook `useAuth()` con `{ user: User | null, login(user: User | null): void, logout(): void }`, respaldado por `lib/storage.ts`. Es necesario porque, al pasar a rutas reales de archivo, ya no existe un único componente `App` que reparta `user` por props como en la plantilla original.
@@ -138,11 +148,11 @@ export function saveScore(entry: { game: string; score: number; name: string }):
 
 ## Risks
 
-| Riesgo | Mitigación |
-| --- | --- |
-| `localStorage` no disponible (modo privado estricto) | Los accesos van envueltos en `try/catch`, igual que en la plantilla; si falla, la sesión simplemente no persiste pero la app sigue funcionando. |
-| Discrepancia de hidratación (SSR sin sesión vs. cliente con sesión de `localStorage`) | `AuthProvider` inicializa `user` en `null` en el primer render y lo actualiza en un `useEffect`, aceptando un parpadeo inicial sin sesión a cambio de evitar el mismatch. |
-| `app/globals.css`, migrado parcialmente en una rama previa, podría no cubrir el 100% de `templates/styles.css` | El paso 13 del plan compara explícitamente cada pantalla contra la plantilla antes de cerrar la implementación. |
+| Riesgo                                                                                                         | Mitigación                                                                                                                                                                |
+| -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `localStorage` no disponible (modo privado estricto)                                                           | Los accesos van envueltos en `try/catch`, igual que en la plantilla; si falla, la sesión simplemente no persiste pero la app sigue funcionando.                           |
+| Discrepancia de hidratación (SSR sin sesión vs. cliente con sesión de `localStorage`)                          | `AuthProvider` inicializa `user` en `null` en el primer render y lo actualiza en un `useEffect`, aceptando un parpadeo inicial sin sesión a cambio de evitar el mismatch. |
+| `app/globals.css`, migrado parcialmente en una rama previa, podría no cubrir el 100% de `templates/styles.css` | El paso 13 del plan compara explícitamente cada pantalla contra la plantilla antes de cerrar la implementación.                                                           |
 
 ---
 
